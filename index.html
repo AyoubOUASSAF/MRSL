@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Réseau Social</title>
+    <link rel="stylesheet" href="main.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Mini Réseau Social</h1>
+        <nav>
+            <ul>
+                <li><a href="#feed">Fil d'actualité</a></li>
+                <li><a href="#messages">Messagerie</a></li>
+                <li><a href="#friends">Liste d'amis</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="feed">
+            <h2>Fil d'actualité</h2>
+            <div id="posts-container"></div>
+        </section>
+
+        <!-- Messagerie -->
+        <section id="messages" style="display:none;">
+            <h2>Messagerie</h2>
+            <!-- conversations -->
+            <div id="conversations-container"></div>
+            <!-- Détail de la conversation sélectionnée -->
+            <div id="message-details"></div>
+        </section>
+
+        <!-- Liste d'amis -->
+        <section id="friends" style="display:none;">
+            <h2>Liste d'amis</h2>
+            <!-- List amis -->
+            <div id="friends-container"></div>
+        </section>
+    </main>
+</body>
+</html>

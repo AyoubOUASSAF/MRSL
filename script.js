@@ -1,4 +1,3 @@
-// Données JSON des posts, conversations, et amis
 const donnees = {
     posts: [
         { id: 1, user: "Hind", content: "Bonjour ! Mon premier post ici !", image: null, reactions: { like: 5, dislike: 2, love: 10 }, comments: [] },
@@ -10,35 +9,34 @@ const donnees = {
     conversations: [
         {
             id: 1,
-            user: "Alice",
-            photo: "alice.png",
+            user: "Arber",
+            photo: "Arber.png",
             lastMessage: "À bientôt !",
             messages: [
-                { timestamp: "2024-11-14 10:30", sender: "Moi", content: "Bonjour Alice !" },
-                { timestamp: "2024-11-14 10:32", sender: "Alice", content: "Salut ! Comment ça va ?" }
+                { timestamp: "2024-11-14 10:30", sender: "Moi", content: "Bonjour Arber !" },
+                { timestamp: "2024-11-14 10:32", sender: "Arber", content: "Salut ! Comment ça va ?" }
             ]
         },
         {
             id: 2,
-            user: "Bob",
-            photo: "bob.png",
+            user: "Alexandre",
+            photo: "Alexandre.png",
             lastMessage: "On se parle demain.",
             messages: [
-                { timestamp: "2024-11-14 09:00", sender: "Moi", content: "Coucou Bob, tout va bien ?" },
-                { timestamp: "2024-11-14 09:05", sender: "Bob", content: "Oui, merci !" }
+                { timestamp: "2024-11-14 09:00", sender: "Moi", content: "Coucou Alexandre, tout va bien ?" },
+                { timestamp: "2024-11-14 09:05", sender: "Alexandre", content: "Oui, merci !" }
             ]
         }
     ],
     amis: [
-        { nom: "Alice Martin", image: "alice.png" },
-        { nom: "Bob Dupont", image: "bob.png" },
-        { nom: "Charlie Leroy", image: "charlie.png" },
-        { nom: "Yasmine Morel", image: "yasmine.png" },
+        { nom: "Maryse Marceau", image: "Maryse.png" },
+        { nom: "Alexandre Torrent", image: "Alexandre.png" },
+        { nom: "Arber Savard", image: "Arber.png" },
+        { nom: "Arienne Chandonnet", image: "Arienne.png" },
         { nom: "Karim Bensalem", image: "karim.png" }
     ]
 };
 
-// Affiche les posts du fil d'actualité avec possibilité de commenter
 function afficherPosts() {
     const conteneurPosts = document.getElementById("posts-container");
     conteneurPosts.innerHTML = "";
@@ -47,17 +45,11 @@ function afficherPosts() {
         const elementPost = document.createElement("div");
         elementPost.className = "post";
 
-        // Nom de l'utilisateur
-        const utilisateur = document.createElement("h3");
-        utilisateur.textContent = post.user;
-        elementPost.appendChild(utilisateur);
+        elementPost.innerHTML = `
+            <h3>${post.user}</h3>
+            <p>${post.content}</p>
+        `;
 
-        // Contenu du post
-        const contenu = document.createElement("p");
-        contenu.textContent = post.content;
-        elementPost.appendChild(contenu);
-
-        // Affichage de l'image en plein écran au clic
         if (post.image) {
             const image = document.createElement("img");
             image.src = post.image;
@@ -67,140 +59,171 @@ function afficherPosts() {
             elementPost.appendChild(image);
         }
 
-        // Section des réactions
         const reactions = document.createElement("div");
         reactions.className = "reactions";
-        const likeButton = creerBoutonReaction("👍", post.reactions.like);
-        const dislikeButton = creerBoutonReaction("👎", post.reactions.dislike);
-        const loveButton = creerBoutonReaction("❤️", post.reactions.love);
-        reactions.append(likeButton, dislikeButton, loveButton);
+        ["like", "dislike", "love"].forEach(type => {
+            const bouton = creerBoutonReaction(type, post.reactions[type]);
+            bouton.addEventListener("click", () => {
+                post.reactions[type]++;
+                afficherPosts();
+            });
+            reactions.appendChild(bouton);
+        });
         elementPost.appendChild(reactions);
 
-        // Section des commentaires
         const commentairesContainer = document.createElement("div");
         commentairesContainer.className = "commentaires-container";
         post.comments.forEach(comment => afficherCommentaire(comment, commentairesContainer));
 
-        // Formulaire pour ajouter un commentaire avec l'icône "Entrée"
         const formulaireCommentaire = document.createElement("form");
         formulaireCommentaire.className = "formulaire-commentaire";
-        const inputCommentaire = document.createElement("input");
-        inputCommentaire.type = "text";
-        inputCommentaire.placeholder = "Ajouter un commentaire...";
-        const boutonCommentaire = document.createElement("button");
-        boutonCommentaire.type = "submit";
-        boutonCommentaire.innerHTML = "⏎"; // Icône d'entrée pour commenter
-        formulaireCommentaire.append(inputCommentaire, boutonCommentaire);
-
-        // Ajouter un commentaire au post
+        formulaireCommentaire.innerHTML = `
+            <input type="text" placeholder="Ajouter un commentaire...">
+            <button type="submit">⏎</button>
+        `;
         formulaireCommentaire.addEventListener("submit", (e) => {
             e.preventDefault();
-            if (inputCommentaire.value.trim() !== "") {
-                post.comments.push({ content: inputCommentaire.value.trim(), replies: [], likes: 0 });
-                afficherPosts(); // Rafraîchir les posts
+            const input = formulaireCommentaire.querySelector("input");
+            if (input.value.trim() !== "") {
+                post.comments.push({ content: input.value.trim(), replies: [], likes: 0 });
+                afficherPosts();
             }
-            inputCommentaire.value = "";
         });
 
-        elementPost.appendChild(commentairesContainer);
-        elementPost.appendChild(formulaireCommentaire);
+        elementPost.append(commentairesContainer, formulaireCommentaire);
         conteneurPosts.appendChild(elementPost);
     });
 }
 
-// Fonction pour afficher un commentaire et gérer les boutons "Like" et "Répondre"
 function afficherCommentaire(comment, container) {
     const commentaireElement = document.createElement("div");
     commentaireElement.className = "commentaire";
+    commentaireElement.innerHTML = `<p>${comment.content}</p>`;
 
-    const texteCommentaire = document.createElement("p");
-    texteCommentaire.textContent = comment.content;
-    commentaireElement.appendChild(texteCommentaire);
-
-    // Boutons Like et Répondre pour le commentaire
-    const boutonLikeCommentaire = document.createElement("button");
-    boutonLikeCommentaire.className = "comment-like";
-    boutonLikeCommentaire.textContent = `👍 ${comment.likes}`;
-    boutonLikeCommentaire.addEventListener("click", () => {
+    const actions = document.createElement("div");
+    actions.className = "actions-commentaire";
+    const boutonLike = creerBoutonReaction("like", comment.likes);
+    boutonLike.addEventListener("click", () => {
         comment.likes++;
-        afficherPosts(); // Rafraîchir les posts
+        afficherPosts();
     });
 
-    const boutonRepondreCommentaire = document.createElement("button");
-    boutonRepondreCommentaire.className = "comment-reply";
-    boutonRepondreCommentaire.textContent = "Répondre";
-    boutonRepondreCommentaire.addEventListener("click", () => {
-        const inputReponse = document.createElement("input");
-        inputReponse.type = "text";
-        inputReponse.placeholder = "Répondre...";
-        const boutonEnvoyerReponse = document.createElement("button");
-        boutonEnvoyerReponse.textContent = "⏎"; // Icône d'entrée pour envoyer la réponse
-
-        const reponseFormulaire = document.createElement("form");
-        reponseFormulaire.className = "formulaire-reponse";
-        reponseFormulaire.append(inputReponse, boutonEnvoyerReponse);
-
-        commentaireElement.appendChild(reponseFormulaire);
-
-        // Ajout de la réponse
-        reponseFormulaire.addEventListener("submit", (e) => {
+    const boutonRepondre = document.createElement("button");
+    boutonRepondre.textContent = "Répondre";
+    boutonRepondre.addEventListener("click", () => {
+        const reponseForm = document.createElement("form");
+        reponseForm.innerHTML = `
+            <input type="text" placeholder="Répondre...">
+            <button type="submit">⏎</button>
+        `;
+        reponseForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            if (inputReponse.value.trim() !== "") {
-                comment.replies.push({ content: inputReponse.value.trim(), likes: 0 });
-                afficherPosts(); // Rafraîchir les posts
+            const input = reponseForm.querySelector("input");
+            if (input.value.trim() !== "") {
+                comment.replies.push({ content: input.value.trim(), likes: 0 });
+                afficherPosts();
             }
         });
+        commentaireElement.appendChild(reponseForm);
     });
 
-    // Conteneur pour les actions de commentaire
-    const actionsCommentaire = document.createElement("div");
-    actionsCommentaire.className = "actions-commentaire";
-    actionsCommentaire.append(boutonLikeCommentaire, boutonRepondreCommentaire);
-    commentaireElement.appendChild(actionsCommentaire);
-
-    // Affichage des réponses
-    const reponsesContainer = document.createElement("div");
-    reponsesContainer.className = "reponses-container";
-    comment.replies.forEach(reply => {
-        const reponseElement = document.createElement("p");
-        reponseElement.className = "reponse";
-        reponseElement.textContent = reply.content;
-        reponsesContainer.appendChild(reponseElement);
-    });
-    commentaireElement.appendChild(reponsesContainer);
-
+    actions.append(boutonLike, boutonRepondre);
+    commentaireElement.appendChild(actions);
     container.appendChild(commentaireElement);
 }
 
-
-// Crée un bouton de réaction avec l'icône et le compteur
-function creerBoutonReaction(emoji, compteur) {
+function creerBoutonReaction(type, compteur) {
     const bouton = document.createElement("button");
     bouton.className = "reaction-button";
-    bouton.textContent = `${emoji} ${compteur}`;
+    bouton.textContent = `${type === "like" ? "👍" : type === "dislike" ? "👎" : "❤️"} ${compteur}`;
     return bouton;
 }
 
-// Affiche une image en plein écran
 function afficherImagePleinEcran(imageSrc) {
     const modal = document.createElement("div");
     modal.className = "modal";
-
-    const image = document.createElement("img");
-    image.src = imageSrc;
-    image.className = "modal-image";
-
-    // Fermer la modal en cliquant dessus
-    modal.addEventListener("click", () => {
-        document.body.removeChild(modal);
-    });
-
-    modal.appendChild(image);
+    modal.innerHTML = `<img src="${imageSrc}" class="modal-image">`;
+    modal.addEventListener("click", () => document.body.removeChild(modal));
     document.body.appendChild(modal);
 }
 
+function afficherConversations() {
+    const conteneur = document.getElementById("conversations-container");
+    const backButton = document.getElementById("back-button");
+    const detailsContainer = document.getElementById("message-details");
 
-// Affiche la liste d'amis
+    conteneur.innerHTML = "";
+    backButton.style.display = "none"; 
+    detailsContainer.innerHTML = "";   
+
+    donnees.conversations.forEach(conversation => {
+        const convElement = document.createElement("div");
+        convElement.className = "conversation";
+        convElement.innerHTML = `
+            <img src="${conversation.photo}" class="conv-image" alt="${conversation.user}">
+            <h4>${conversation.user}</h4>
+            <p>${conversation.lastMessage}</p>
+        `;
+        convElement.addEventListener("click", () => {
+            afficherDetailsConversation(conversation);
+            conteneur.style.display = "none";  
+            backButton.style.display = "block";  
+        });
+        conteneur.appendChild(convElement);
+    });
+}
+
+function afficherDetailsConversation(conversation) {
+    const detailsContainer = document.getElementById("message-details");
+    detailsContainer.innerHTML = `
+        <div class="conversation-header">
+            <img src="${conversation.photo}" class="conv-image" alt="${conversation.user}">
+            <h4>${conversation.user}</h4>
+        </div>
+    `;
+
+    const messagesContainer = document.createElement("div");
+    messagesContainer.className = "messages-container";
+    conversation.messages.forEach(msg => afficherMessage(msg, messagesContainer));
+    detailsContainer.appendChild(messagesContainer);
+
+    const formMessage = document.createElement("form");
+    formMessage.className = "formulaire-message";
+    formMessage.innerHTML = `
+        <input type="text" placeholder="Écrire un message...">
+        <button type="submit">⏎</button>
+    `;
+    formMessage.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = formMessage.querySelector("input");
+        if (input.value.trim() !== "") {
+            conversation.messages.push({
+                timestamp: new Date().toLocaleString("fr-FR"),
+                sender: "Moi",
+                content: input.value.trim()
+            });
+            afficherDetailsConversation(conversation);
+        }
+    });
+    detailsContainer.appendChild(formMessage);
+}
+
+function afficherMessage(message, container) {
+    const msgElement = document.createElement("div");
+    msgElement.className = "message";
+    msgElement.innerHTML = `
+        <p class="message-details">${message.sender} • ${message.timestamp}</p>
+        <p class="message-content">${message.content}</p>
+    `;
+    container.appendChild(msgElement);
+}
+
+function retourConversations() {
+    document.getElementById("conversations-container").style.display = "block"; 
+    document.getElementById("message-details").innerHTML = "";  
+    document.getElementById("back-button").style.display = "none";  
+}
+
 function afficherAmis() {
     const conteneurAmis = document.getElementById("friends-container");
     conteneurAmis.innerHTML = "";
@@ -209,178 +232,95 @@ function afficherAmis() {
         const amiElement = document.createElement("div");
         amiElement.className = "ami";
 
-        const amiImage = document.createElement("img");
-        amiImage.src = ami.image;
-        amiImage.alt = ami.nom;
-        amiImage.className = "ami-image";
-        amiElement.appendChild(amiImage);
+        amiElement.innerHTML = `
+            <img src="${ami.image}" alt="${ami.nom}" class="ami-image">
+            <p>${ami.nom}</p>
+            <a href="#messages" class="message-link">💬</a> <!-- Icone de lien vers la messagerie -->
+        `;
 
-        const amiNom = document.createElement("p");
-        amiNom.textContent = ami.nom;
-        amiElement.appendChild(amiNom);
+        // Listener pour ouvrir la section de messagerie avec le nom du contact
+        amiElement.querySelector(".message-link").addEventListener("click", (e) => {
+            e.preventDefault();
+            afficherSection("messages");
+            afficherConversationPourAmi(ami.nom);
+        });
 
         conteneurAmis.appendChild(amiElement);
     });
 }
 
-// Affiche la liste des conversations et cache le bouton de retour
-function afficherConversations() {
-    const conteneurConversations = document.getElementById("conversations-container");
-    const backButton = document.getElementById("back-button");
-    const detailsContainer = document.getElementById("message-details");
+// Nouvelle fonction pour ouvrir une conversation avec l'ami sélectionné
+function afficherConversationPourAmi(nomAmi) {
+    const conversation = donnees.conversations.find(conv => conv.user === nomAmi);
 
-    conteneurConversations.innerHTML = "";
-    backButton.style.display = "none";  // Cacher le bouton de retour lors de l'affichage de la liste
-    detailsContainer.innerHTML = "";  // Vider les détails de la conversation
+    if (conversation) {
+        afficherDetailsConversation(conversation);
+    } else {
+        const detailsContainer = document.getElementById("message-details");
+        detailsContainer.innerHTML = `<p>Aucune conversation trouvée avec ${nomAmi}</p>`;
+    }
+}
 
-    donnees.conversations.forEach(conversation => {
-        const convElement = document.createElement("div");
-        convElement.className = "conversation";
-        
-        // Photo de profil
-        const convPhoto = document.createElement("img");
-        convPhoto.src = conversation.photo;
-        convPhoto.alt = conversation.user;
-        convPhoto.className = "conv-image";
-        convElement.appendChild(convPhoto);
 
-        // Nom de l'utilisateur
-        const utilisateur = document.createElement("h4");
-        utilisateur.textContent = conversation.user;
-        convElement.appendChild(utilisateur);
+function filtrerAmis() {
+    const filtre = document.getElementById("friend-filter").value.toLowerCase();
+    document.querySelectorAll("#friends-container .ami").forEach(ami => {
+        const nom = ami.querySelector("p").textContent.toLowerCase();
+        ami.style.display = nom.includes(filtre) ? "block" : "none";
+    });
+}
 
-        // Dernier message
-        const dernierMessage = document.createElement("p");
-        dernierMessage.textContent = conversation.lastMessage;
-        convElement.appendChild(dernierMessage);
+function activerDragAndDrop() {
+    const container = document.getElementById("friends-container");
+    let draggedItem = null;
 
-        // Ouvrir les détails de la conversation lors du clic
-        convElement.addEventListener("click", () => {
-            afficherDetailsConversation(conversation);
-            conteneurConversations.style.display = "none";  // Cacher la liste des conversations
-            backButton.style.display = "block";  // Afficher le bouton de retour
+    container.querySelectorAll(".ami").forEach(ami => {
+        ami.draggable = true;
+        ami.addEventListener("dragstart", () => {
+            draggedItem = ami;
+            ami.classList.add("dragging");
+            setTimeout(() => ami.style.display = "none", 0);
         });
-        
-        conteneurConversations.appendChild(convElement);
+
+        ami.addEventListener("dragend", () => {
+            ami.classList.remove("dragging");
+            setTimeout(() => {
+                ami.style.display = "block";
+                draggedItem = null;
+            }, 0);
+        });
+
+        ami.addEventListener("dragover", (e) => e.preventDefault());
+
+        ami.addEventListener("drop", () => {
+            if (draggedItem !== ami) {
+                const amisList = Array.from(container.children);
+                const draggedIndex = amisList.indexOf(draggedItem);
+                const amiIndex = amisList.indexOf(ami);
+
+                if (draggedIndex < amiIndex) {
+                    container.insertBefore(draggedItem, ami.nextSibling);
+                } else {
+                    container.insertBefore(draggedItem, ami);
+                }
+            }
+        });
     });
 }
 
-// Affiche les détails de la conversation et active le bouton de retour
-function afficherDetailsConversation(conversation) {
-    const detailsContainer = document.getElementById("message-details");
-    detailsContainer.innerHTML = "";
-
-    // En-tête de la conversation
-    const header = document.createElement("div");
-    header.className = "conversation-header";
-    const photo = document.createElement("img");
-    photo.src = conversation.photo;
-    photo.alt = conversation.user;
-    photo.className = "conv-image";
-    const nomUtilisateur = document.createElement("h4");
-    nomUtilisateur.textContent = conversation.user;
-
-    header.appendChild(photo);
-    header.appendChild(nomUtilisateur);
-    detailsContainer.appendChild(header);
-
-    // Affiche chaque message
-    const messagesContainer = document.createElement("div");
-    messagesContainer.className = "messages-container";
-    conversation.messages.forEach(msg => afficherMessage(msg, messagesContainer));
-    detailsContainer.appendChild(messagesContainer);
-
-    // Formulaire pour ajouter un message
-    const formMessage = document.createElement("form");
-    formMessage.className = "formulaire-message";
-    const inputMessage = document.createElement("input");
-    inputMessage.type = "text";
-    inputMessage.placeholder = "Écrire un message...";
-    const boutonEnvoyer = document.createElement("button");
-    boutonEnvoyer.type = "submit";
-    boutonEnvoyer.textContent = "⏎";  // Icône d'entrée
-
-    formMessage.append(inputMessage, boutonEnvoyer);
-
-    // Ajout du nouveau message
-    formMessage.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (inputMessage.value.trim() !== "") {
-            const newMessage = {
-                timestamp: new Date().toLocaleString("fr-FR"),
-                sender: "Moi",
-                content: inputMessage.value.trim()
-            };
-            conversation.messages.push(newMessage);
-            afficherDetailsConversation(conversation);  // Rafraîchir la vue de la conversation
-            inputMessage.value = "";
-        }
-    });
-
-    detailsContainer.appendChild(formMessage);
-}
-
-// Fonction pour revenir à la liste des conversations
-function retourConversations() {
-    document.getElementById("conversations-container").style.display = "block";  // Afficher la liste des conversations
-    document.getElementById("message-details").innerHTML = "";  // Vider les détails de la conversation
-    document.getElementById("back-button").style.display = "none";  // Cacher le bouton de retour
-}
-
-
-// Affiche un message individuel
-function afficherMessage(message, container) {
-    const msgElement = document.createElement("div");
-    msgElement.className = "message";
-
-    // Horodatage et expéditeur
-    const details = document.createElement("p");
-    details.className = "message-details";
-    details.textContent = `${message.sender} • ${message.timestamp}`;
-
-    // Contenu du message
-    const content = document.createElement("p");
-    content.className = "message-content";
-    content.textContent = message.content;
-
-    msgElement.appendChild(details);
-    msgElement.appendChild(content);
-    container.appendChild(msgElement);
-}
-
-// Retour à la liste des conversations
-function retourConversations() {
-    document.getElementById("conversations-container").style.display = "block";
-    document.getElementById("message-details").innerHTML = ""; // Vider les détails de la conversation
-}
-
-
-
-// Navigation entre les sections
 function afficherSection(sectionId) {
-    const sections = document.querySelectorAll("main > section");
-    sections.forEach(section => {
+    document.querySelectorAll("main > section").forEach(section => {
         section.style.display = section.id === sectionId ? "block" : "none";
     });
 }
 
-// Écouteurs pour les liens de navigation
 document.querySelectorAll("nav a").forEach(link => {
-    link.addEventListener("click", (event) => {
-        const sectionId = event.target.getAttribute("href").substring(1);
-        afficherSection(sectionId);
+    link.addEventListener("click", event => {
         event.preventDefault();
+        afficherSection(event.target.getAttribute("href").substring(1));
     });
 });
 
-// Fonction pour basculer l'état de la barre latérale
-document.getElementById("menu-toggle").addEventListener("click", () => {
-    document.querySelector(".sidebar").classList.toggle("collapsed");
-    document.querySelector(".sidebar").classList.toggle("active"); // Toggle pour mobile
-});
-
-
-// Affichage initial
 afficherSection("feed");
 afficherPosts();
 afficherAmis();

@@ -37,9 +37,14 @@
             <div id="posts-container"></div>
         </section>
 
+        <!-- Messagerie section with back button and dynamic content -->
         <section id="messages" style="display:none;">
             <h2>Messagerie</h2>
+            <!-- Bouton de retour pour revenir à la liste des conversations -->
+            <button onclick="retourConversations()" id="back-button" style="display:none;">← Retour</button>
+            <!-- Liste des conversations -->
             <div id="conversations-container"></div>
+            <!-- Détails de la conversation sélectionnée -->
             <div id="message-details"></div>
         </section>
 

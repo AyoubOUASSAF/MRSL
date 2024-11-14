@@ -11,7 +11,7 @@ body {
     color: #4b0082;
 }
 
-/* Barre latérale */
+/* Barre Latérale */
 .sidebar {
     width: 200px;
     background-color: #4b0082;
@@ -86,7 +86,7 @@ body {
     color: #4b0082;
 }
 
-/* Contenu principal */
+/*Contenu principal */
 main {
     margin-left: 220px;
     padding: 2rem;
@@ -107,7 +107,7 @@ section {
     background-color: #f3f0ff;
 }
 
-/* Style des posts, amis et conversations */
+/* Cartes de messages, d'amis et de conversation */
 .post, .ami, .conversation {
     padding: 1rem;
     border-radius: 8px;
@@ -151,7 +151,7 @@ section {
     box-shadow: 2px 2px 5px #dcd6f7, -2px -2px 5px #ffffff;
 }
 
-/* Barre de navigation en bas pour les écrans mobiles */
+/*Navigation inférieure pour mobile */
 .bottom-nav {
     display: none;
 }
@@ -174,7 +174,7 @@ section {
     font-size: 1.5rem;
 }
 
-/* Responsive  */
+/* Responsive design pour mobile */
 @media (max-width: 768px) {
     .sidebar {
         display: none;
@@ -190,6 +190,190 @@ section {
     }
 
     section {
-        padding-bottom: 4rem; 
+        padding-bottom: 4rem;
     }
+}
+
+/* Section commentaires */
+.commentaires-container {
+    margin-top: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid #dcd6f7;
+}
+
+.commentaire, .reponse {
+    margin-bottom: 0.5rem;
+    color: #4b0082;
+    font-size: 0.9rem;
+}
+
+.actions-commentaire {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.comment-like, .comment-reply {
+    background: none;
+    border: none;
+    color: #4b0082;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.comment-like:hover, .comment-reply:hover {
+    color: #6a0dad;
+}
+
+/* Formulaire d'ajout de commentaires et de réponses */
+.formulaire-commentaire, .formulaire-reponse {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.formulaire-commentaire input, .formulaire-reponse input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #dcd6f7;
+    margin-right: 0.5rem;
+}
+
+.formulaire-commentaire button, .formulaire-reponse button {
+    padding: 0.5rem;
+    background: none;
+    color: #4b0082;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+}
+
+.formulaire-commentaire button:hover {
+    background-color: #6a0dad;
+}
+
+/* Réponses imbriquées*/
+.reponses-container {
+    margin-left: 1.5rem;
+    padding-left: 1rem;
+    border-left: 1px solid #dcd6f7;
+}
+
+/* Mode d'image plein écran */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-image {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+/* Conversation list */
+.conversation {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 4px 4px 8px #dcd6f7, -4px -4px 8px #ffffff;
+    background-color: #e6e1f7;
+    cursor: pointer;
+}
+
+.conversation:hover {
+    background-color: #d8d0f4;
+}
+
+.conv-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
+    box-shadow: 2px 2px 5px #dcd6f7, -2px -2px 5px #ffffff;
+}
+
+/* Conversation details */
+.conversation-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #f9f7ff;
+    border-radius: 8px;
+}
+
+.message {
+    background-color: #ffffff;
+    padding: 0.8rem;
+    border-radius: 6px;
+    box-shadow: 2px 2px 5px #dcd6f7, -2px -2px 5px #ffffff;
+}
+
+.message-details {
+    font-size: 0.8rem;
+    color: #4b0082;
+    margin-bottom: 0.2rem;
+}
+
+.message-content {
+    font-size: 0.9rem;
+}
+
+/* Form for sending messages */
+.formulaire-message {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.formulaire-message input {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #dcd6f7;
+}
+
+.formulaire-message button {
+    padding: 0.5rem 1rem;
+    background: none;
+    color: #4b0082;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+}
+/* Bouton de retour */
+#back-button {
+    background: none;
+    border: none;
+    color: #4b0082;
+    font-size: 1rem;
+    cursor: pointer;
+    margin: 1rem 0;
+    display: block;
+}
+
+#back-button:hover {
+    color: #6a0dad;
 }

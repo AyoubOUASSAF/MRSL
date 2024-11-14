@@ -74,3 +74,20 @@ h2 {
 .button:hover {
     box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
 }
+/* Style de chaque post */
+.post {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; /* Effet neumorphique */
+    background-color: #e0e0e0;
+}
+
+/* Style de l'image dans chaque post */
+.post-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}

@@ -6,88 +6,190 @@
 }
 
 body {
-    background-color: #e0e0e0;
-    color: #333;
+    display: flex;
+    background-color: #f3f0ff;
+    color: #4b0082;
+}
+
+/* Barre latérale */
+.sidebar {
+    width: 200px;
+    background-color: #4b0082;
+    color: #ffffff;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: fixed;
+    height: 100%;
+    transition: width 0.3s, transform 0.3s;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
 }
 
-header {
-    width: 100%;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
-    background-color: #e0e0e0;
-    margin-bottom: 2rem;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; 
-    background-color: #e0e0e0;
-}
-
-/* Style pour les sections */
-section {
-    width: 90%;
-    max-width: 800px;
-    margin-bottom: 2rem;
-    padding: 1rem;
-    border-radius: 15px;
-    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; /* Effet neumorphique pour les sections */
-    background-color: #e0e0e0;
-}
-
-h2 {
+#menu-toggle {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    align-self: flex-start;
     margin-bottom: 1rem;
 }
 
-/* Style pour les conteneurs de posts, de conversations et de liste d'amis */
-#posts-container, #conversations-container, #friends-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+#sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
 }
 
-/* Style des boutons pour les réactions et interactions */
-.button {
-    padding: 0.5rem 1rem;
+.sidebar.collapsed {
+    width: 60px;
+}
+
+.sidebar.collapsed #sidebar-title {
+    display: none;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 1rem;
+}
+
+.sidebar nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.sidebar.collapsed nav ul li a {
+    justify-content: center;
+}
+
+.sidebar.collapsed nav ul li a span {
+    display: none;
+}
+
+.sidebar nav ul li a:hover {
+    background-color: #e6e1f7;
+    color: #4b0082;
+}
+
+/* Contenu principal */
+main {
+    margin-left: 220px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 800px;
+    transition: margin-left 0.3s;
+}
+
+.sidebar.collapsed + main {
+    margin-left: 80px;
+}
+
+section {
+    margin-bottom: 2rem;
+    padding: 1rem;
     border-radius: 10px;
+    box-shadow: 8px 8px 16px #dcd6f7, -8px -8px 16px #ffffff;
+    background-color: #f3f0ff;
+}
+
+/* Style des posts, amis et conversations */
+.post, .ami, .conversation {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 4px 4px 8px #dcd6f7, -4px -4px 8px #ffffff;
+    background-color: #e6e1f7;
+}
+
+.reaction-button {
+    background-color: #e6e1f7;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
     font-size: 1rem;
     cursor: pointer;
-    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff;
-    background-color: #e0e0e0;
-    border: none;
+    margin-right: 0.5rem;
+    transition: box-shadow 0.2s, background-color 0.2s, color 0.2s;
+    color: #4b0082;
 }
 
-.button:hover {
-    box-shadow: inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff;
-}
-/* Style de chaque post */
-.post {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    box-shadow: 8px 8px 16px #bebebe, -8px -8px 16px #ffffff; /* Effet neumorphique */
-    background-color: #e0e0e0;
+.reaction-button:hover {
+    box-shadow: inset 4px 4px 8px #dcd6f7, inset -4px -4px 8px #ffffff;
 }
 
-/* Style de l'image dans chaque post */
-.post-image {
+.reaction-button.selected {
+    background-color: #4b0082;
+    color: #ffffff;
+    box-shadow: none;
+}
+
+.ami, .conversation {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ami-image, .conv-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px #dcd6f7, -2px -2px 5px #ffffff;
+}
+
+/* Barre de navigation en bas pour les écrans mobiles */
+.bottom-nav {
+    display: none;
+}
+
+.bottom-nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0.5rem 0;
+    margin: 0;
+    background-color: #4b0082;
+    position: fixed;
+    bottom: 0;
     width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 8px;
-    margin-top: 0.5rem;
+}
+
+.bottom-nav ul li a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.5rem;
+}
+
+/* Responsive  */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .bottom-nav {
+        display: block;
+    }
+
+    main {
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    section {
+        padding-bottom: 4rem; 
+    }
 }

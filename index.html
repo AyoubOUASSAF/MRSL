@@ -3,41 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Réseau Social</title>
+    <title>MRSL</title>
     <link rel="stylesheet" href="main.css">
     <script defer src="script.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Mini Réseau Social</h1>
+    <!-- Barre latérale pour la navigation principale sur les écrans larges -->
+    <aside class="sidebar">
+        <button id="menu-toggle">☰</button>
+        <h1 id="sidebar-title">MRSL</h1>
         <nav>
             <ul>
-                <li><a href="#feed">Fil d'actualité</a></li>
-                <li><a href="#messages">Messagerie</a></li>
-                <li><a href="#friends">Liste d'amis</a></li>
+                <li><a href="#feed">🏠 <span>Accueil</span></a></li>
+                <li><a href="#messages">💬 <span>Conversations</span></a></li>
+                <li><a href="#friends">👥 <span>Ami(e)s</span></a></li>
             </ul>
         </nav>
-    </header>
+    </aside>
 
+    <!-- Barre de navigation en bas pour les écrans mobiles -->
+    <nav class="bottom-nav">
+        <ul>
+            <li><a href="#feed">🏠</a></li>
+            <li><a href="#messages">💬</a></li>
+            <li><a href="#friends">👥</a></li>
+        </ul>
+    </nav>
+
+    <!-- Contenu principal -->
     <main>
         <section id="feed">
             <h2>Fil d'actualité</h2>
             <div id="posts-container"></div>
         </section>
 
-        <!-- Messagerie -->
         <section id="messages" style="display:none;">
             <h2>Messagerie</h2>
-            <!-- conversations -->
             <div id="conversations-container"></div>
-            <!-- Détail de la conversation sélectionnée -->
             <div id="message-details"></div>
         </section>
 
-        <!-- Liste d'amis -->
         <section id="friends" style="display:none;">
             <h2>Liste d'amis</h2>
-            <!-- List amis -->
             <div id="friends-container"></div>
         </section>
     </main>
